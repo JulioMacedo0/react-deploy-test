@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { mockProducts } from "../../mocks/productMock";
+import { mockProducts, PRODUCT_CATEGORIES } from "../../mocks/productMock";
 
 const productsSearchSchema = z.object({
-  category: z.string().optional(),
+  category: z.enum(PRODUCT_CATEGORIES).optional(),
   sort: z.enum(["name", "price", "date"]).optional().default("name"),
   page: z.number().min(1).optional().default(1),
 });
@@ -40,7 +40,7 @@ function ProductsComponent() {
   });
 
   // Pagination
-  const itemsPerPage = 4;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (page - 1) * itemsPerPage;
   const paginatedProducts = filteredProducts.slice(
@@ -84,7 +84,7 @@ function ProductsComponent() {
               >
                 All
               </Link>
-              {["electronics", "home", "accessories"].map((cat) => (
+              {PRODUCT_CATEGORIES.map((cat) => (
                 <Link
                   key={cat}
                   to="/products"
@@ -157,7 +157,7 @@ function ProductsComponent() {
         )}
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {paginatedProducts.map((product) => (
           <div
             key={product.id}

@@ -10,25 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardAnalyticsRouteImport } from './routes/dashboard.analytics'
-import { Route as BlogPostIdRouteImport } from './routes/blog.$postId'
 import { Route as ProductsFindProductIdRouteImport } from './routes/products/find/$productId'
+import { Route as BlogFindPostIdRouteImport } from './routes/blog/find/$postId'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -51,6 +46,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -66,54 +66,54 @@ const DashboardAnalyticsRoute = DashboardAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => DashboardRoute,
 } as any)
-const BlogPostIdRoute = BlogPostIdRouteImport.update({
-  id: '/$postId',
-  path: '/$postId',
-  getParentRoute: () => BlogRoute,
-} as any)
 const ProductsFindProductIdRoute = ProductsFindProductIdRouteImport.update({
   id: '/products/find/$productId',
   path: '/products/find/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogFindPostIdRoute = BlogFindPostIdRouteImport.update({
+  id: '/blog/find/$postId',
+  path: '/blog/find/$postId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/products': typeof ProductsIndexRoute
+  '/blog/find/$postId': typeof BlogFindPostIdRoute
   '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
-  '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/products': typeof ProductsIndexRoute
+  '/blog/find/$postId': typeof BlogFindPostIdRoute
   '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/blog/find/$postId': typeof BlogFindPostIdRoute
   '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRouteTypes {
@@ -121,48 +121,49 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/blog'
     | '/dashboard'
-    | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
+    | '/blog'
     | '/dashboard/'
     | '/products'
+    | '/blog/find/$postId'
     | '/products/find/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/blog'
-    | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
+    | '/blog'
     | '/dashboard'
     | '/products'
+    | '/blog/find/$postId'
     | '/products/find/$productId'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/blog'
     | '/dashboard'
-    | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
+    | '/blog/'
     | '/dashboard/'
     | '/products/'
+    | '/blog/find/$postId'
     | '/products/find/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  BlogRoute: typeof BlogRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
+  BlogIndexRoute: typeof BlogIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  BlogFindPostIdRoute: typeof BlogFindPostIdRoute
   ProductsFindProductIdRoute: typeof ProductsFindProductIdRoute
 }
 
@@ -173,13 +174,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -210,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/settings': {
       id: '/dashboard/settings'
       path: '/settings'
@@ -231,13 +232,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAnalyticsRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/blog/$postId': {
-      id: '/blog/$postId'
-      path: '/$postId'
-      fullPath: '/blog/$postId'
-      preLoaderRoute: typeof BlogPostIdRouteImport
-      parentRoute: typeof BlogRoute
-    }
     '/products/find/$productId': {
       id: '/products/find/$productId'
       path: '/products/find/$productId'
@@ -245,18 +239,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsFindProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/find/$postId': {
+      id: '/blog/find/$postId'
+      path: '/blog/find/$postId'
+      fullPath: '/blog/find/$postId'
+      preLoaderRoute: typeof BlogFindPostIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
-
-interface BlogRouteChildren {
-  BlogPostIdRoute: typeof BlogPostIdRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogPostIdRoute: BlogPostIdRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface DashboardRouteChildren {
   DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
@@ -279,9 +270,10 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  BlogRoute: BlogRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
+  BlogIndexRoute: BlogIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  BlogFindPostIdRoute: BlogFindPostIdRoute,
   ProductsFindProductIdRoute: ProductsFindProductIdRoute,
 }
 export const routeTree = rootRouteImport

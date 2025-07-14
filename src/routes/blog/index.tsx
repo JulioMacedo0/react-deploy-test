@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { mockBlogPosts } from "../mocks/mockBlog";
+import { mockBlogPosts } from "../../mocks/mockBlog";
 
 const blogSearchSchema = z.object({
   page: z.number().min(1).optional().default(1),
@@ -11,7 +11,7 @@ const blogSearchSchema = z.object({
 
 type BlogSearchSchemaType = z.infer<typeof blogSearchSchema>;
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   validateSearch: blogSearchSchema,
   component: BlogComponent,
 });
@@ -244,7 +244,7 @@ function BlogComponent() {
 
                   <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     <Link
-                      to="/blog/$postId"
+                      to="/blog/find/$postId"
                       params={{ postId: post.id.toString() }}
                     >
                       {post.title}

@@ -1,4 +1,28 @@
-export const mockProducts = [
+export const PRODUCT_CATEGORIES = [
+  "electronics",
+  "home",
+  "accessories",
+  "clothing",
+  "books",
+  "sports",
+  "beauty",
+  "automotive",
+] as const;
+
+export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: ProductCategory;
+  image: string;
+  description: string;
+  features: string[];
+  specs: Record<string, string>;
+}
+
+export const mockProducts: Product[] = [
   {
     id: 1,
     name: "Wireless Headphones",
@@ -130,6 +154,226 @@ export const mockProducts = [
       "Battery Life": "12 months",
       Buttons: "6 programmable",
       Compatibility: "Windows, Mac, Linux",
+    },
+  },
+  {
+    id: 7,
+    name: "Running Shoes",
+    price: 129.99,
+    category: "sports",
+    image: "👟",
+    description: "Lightweight running shoes with advanced cushioning",
+    features: [
+      "Breathable mesh upper",
+      "Advanced cushioning",
+      "Durable rubber outsole",
+      "Lightweight design",
+      "Arch support",
+    ],
+    specs: {
+      Material: "Mesh & Synthetic",
+      Weight: "280g",
+      "Heel Drop": "10mm",
+      "Cushioning Type": "EVA Foam",
+      Sizes: "6-12 US",
+    },
+  },
+  {
+    id: 8,
+    name: "Winter Jacket",
+    price: 189.99,
+    category: "clothing",
+    image: "🧥",
+    description: "Waterproof winter jacket with thermal insulation",
+    features: [
+      "Waterproof fabric",
+      "Thermal insulation",
+      "Adjustable hood",
+      "Multiple pockets",
+      "Wind resistant",
+    ],
+    specs: {
+      Material: "Polyester",
+      Insulation: "Synthetic down",
+      "Water Resistance": "10,000mm",
+      Temperature: "-20°C to 5°C",
+      Sizes: "XS-XXL",
+    },
+  },
+  {
+    id: 9,
+    name: "Programming Book",
+    price: 49.99,
+    category: "books",
+    image: "📚",
+    description: "Comprehensive guide to modern web development",
+    features: [
+      "500+ pages",
+      "Practical examples",
+      "Expert insights",
+      "Updated content",
+      "Code samples",
+    ],
+    specs: {
+      Pages: "520",
+      Language: "English",
+      Publisher: "Tech Books",
+      Edition: "2nd Edition",
+      Format: "Paperback & Digital",
+    },
+  },
+  {
+    id: 10,
+    name: "Face Moisturizer",
+    price: 34.99,
+    category: "beauty",
+    image: "🧴",
+    description: "Hydrating face moisturizer with SPF protection",
+    features: [
+      "SPF 30 protection",
+      "Hyaluronic acid",
+      "All skin types",
+      "Non-greasy formula",
+      "Dermatologist tested",
+    ],
+    specs: {
+      Volume: "50ml",
+      "SPF Level": "30",
+      "Key Ingredients": "Hyaluronic Acid, Vitamin E",
+      "Skin Type": "All types",
+      "Shelf Life": "24 months",
+    },
+  },
+  {
+    id: 11,
+    name: "Car Phone Holder",
+    price: 19.99,
+    category: "automotive",
+    image: "📱",
+    description: "Universal car phone mount with 360° rotation",
+    features: [
+      "360° rotation",
+      "Universal compatibility",
+      "Strong suction cup",
+      "One-hand operation",
+      "Dashboard mounting",
+    ],
+    specs: {
+      Compatibility: "4-7 inch phones",
+      Material: "ABS plastic",
+      "Mount Type": "Dashboard/Windshield",
+      Rotation: "360 degrees",
+      Weight: "150g",
+    },
+  },
+  {
+    id: 12,
+    name: "Yoga Mat",
+    price: 39.99,
+    category: "sports",
+    image: "🧘",
+    description: "Non-slip yoga mat with alignment guides",
+    features: [
+      "Non-slip surface",
+      "Alignment guides",
+      "Eco-friendly material",
+      "Easy to clean",
+      "Carrying strap included",
+    ],
+    specs: {
+      Dimensions: "183cm x 61cm",
+      Thickness: "6mm",
+      Material: "TPE",
+      Weight: "1.1kg",
+      Colors: "Purple, Blue, Green",
+    },
+  },
+  {
+    id: 13,
+    name: "Casual T-Shirt",
+    price: 24.99,
+    category: "clothing",
+    image: "👕",
+    description: "Comfortable cotton t-shirt for everyday wear",
+    features: [
+      "100% cotton",
+      "Pre-shrunk fabric",
+      "Comfortable fit",
+      "Machine washable",
+      "Multiple colors",
+    ],
+    specs: {
+      Material: "100% Cotton",
+      Fit: "Regular",
+      "Neck Type": "Round neck",
+      "Care Instructions": "Machine wash cold",
+      Sizes: "XS-XXL",
+    },
+  },
+  {
+    id: 14,
+    name: "Cookbook",
+    price: 29.99,
+    category: "books",
+    image: "👨‍🍳",
+    description: "Healthy recipes for busy lifestyles",
+    features: [
+      "100+ healthy recipes",
+      "Quick 30-min meals",
+      "Nutritional information",
+      "Beautiful photography",
+      "Meal planning tips",
+    ],
+    specs: {
+      Pages: "280",
+      Recipes: "120",
+      Language: "English",
+      Format: "Hardcover",
+      Publisher: "Healthy Living Books",
+    },
+  },
+  {
+    id: 15,
+    name: "Bluetooth Speaker",
+    price: 79.99,
+    category: "electronics",
+    image: "🔊",
+    description: "Portable waterproof Bluetooth speaker",
+    features: [
+      "Waterproof design",
+      "12-hour battery",
+      "Crystal clear sound",
+      "Hands-free calling",
+      "Compact size",
+    ],
+    specs: {
+      "Battery Life": "12 hours",
+      "Water Rating": "IPX7",
+      Connectivity: "Bluetooth 5.0",
+      Range: "30 feet",
+      Weight: "500g",
+    },
+  },
+  {
+    id: 16,
+    name: "Essential Oil Set",
+    price: 44.99,
+    category: "beauty",
+    image: "🌿",
+    description: "Aromatherapy essential oil set with diffuser",
+    features: [
+      "6 essential oils",
+      "Ultrasonic diffuser",
+      "LED mood lighting",
+      "Timer function",
+      "Auto shut-off",
+    ],
+    specs: {
+      "Oil Volume": "10ml each",
+      "Diffuser Capacity": "300ml",
+      "Run Time": "6 hours",
+      Coverage: "300 sq ft",
+      "LED Colors": "7 colors",
     },
   },
 ];
