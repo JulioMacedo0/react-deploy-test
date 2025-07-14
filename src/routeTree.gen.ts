@@ -9,23 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ProductsRouteImport } from './routes/products'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
-import { Route as ProductsProductIdRouteImport } from './routes/products.$productId'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardAnalyticsRouteImport } from './routes/dashboard.analytics'
 import { Route as BlogPostIdRouteImport } from './routes/blog.$postId'
+import { Route as ProductsFindProductIdRouteImport } from './routes/products/find/$productId'
 
-const ProductsRoute = ProductsRouteImport.update({
-  id: '/products',
-  path: '/products',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -46,15 +41,15 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => DashboardRoute,
-} as any)
-const ProductsProductIdRoute = ProductsProductIdRouteImport.update({
-  id: '/$productId',
-  path: '/$productId',
-  getParentRoute: () => ProductsRoute,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
@@ -76,31 +71,36 @@ const BlogPostIdRoute = BlogPostIdRouteImport.update({
   path: '/$postId',
   getParentRoute: () => BlogRoute,
 } as any)
+const ProductsFindProductIdRoute = ProductsFindProductIdRouteImport.update({
+  id: '/products/find/$productId',
+  path: '/products/find/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/products': typeof ProductsRouteWithChildren
   '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
-  '/products/$productId': typeof ProductsProductIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/products': typeof ProductsIndexRoute
+  '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
-  '/products': typeof ProductsRouteWithChildren
   '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
-  '/products/$productId': typeof ProductsProductIdRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/products': typeof ProductsIndexRoute
+  '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,13 +108,13 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
-  '/products': typeof ProductsRouteWithChildren
   '/blog/$postId': typeof BlogPostIdRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
-  '/products/$productId': typeof ProductsProductIdRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/products/': typeof ProductsIndexRoute
+  '/products/find/$productId': typeof ProductsFindProductIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,38 +123,38 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/dashboard'
-    | '/products'
     | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
-    | '/products/$productId'
     | '/dashboard/'
+    | '/products'
+    | '/products/find/$productId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/blog'
-    | '/products'
     | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
-    | '/products/$productId'
     | '/dashboard'
+    | '/products'
+    | '/products/find/$productId'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/blog'
     | '/dashboard'
-    | '/products'
     | '/blog/$postId'
     | '/dashboard/analytics'
     | '/dashboard/profile'
     | '/dashboard/settings'
-    | '/products/$productId'
     | '/dashboard/'
+    | '/products/'
+    | '/products/find/$productId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -162,18 +162,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
-  ProductsRoute: typeof ProductsRouteWithChildren
+  ProductsIndexRoute: typeof ProductsIndexRoute
+  ProductsFindProductIdRoute: typeof ProductsFindProductIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/products': {
-      id: '/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof ProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -202,19 +196,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/products/': {
+      id: '/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
-    }
-    '/products/$productId': {
-      id: '/products/$productId'
-      path: '/$productId'
-      fullPath: '/products/$productId'
-      preLoaderRoute: typeof ProductsProductIdRouteImport
-      parentRoute: typeof ProductsRoute
     }
     '/dashboard/settings': {
       id: '/dashboard/settings'
@@ -243,6 +237,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/$postId'
       preLoaderRoute: typeof BlogPostIdRouteImport
       parentRoute: typeof BlogRoute
+    }
+    '/products/find/$productId': {
+      id: '/products/find/$productId'
+      path: '/products/find/$productId'
+      fullPath: '/products/find/$productId'
+      preLoaderRoute: typeof ProductsFindProductIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -275,24 +276,13 @@ const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
   DashboardRouteChildren,
 )
 
-interface ProductsRouteChildren {
-  ProductsProductIdRoute: typeof ProductsProductIdRoute
-}
-
-const ProductsRouteChildren: ProductsRouteChildren = {
-  ProductsProductIdRoute: ProductsProductIdRoute,
-}
-
-const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
-  ProductsRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
-  ProductsRoute: ProductsRouteWithChildren,
+  ProductsIndexRoute: ProductsIndexRoute,
+  ProductsFindProductIdRoute: ProductsFindProductIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

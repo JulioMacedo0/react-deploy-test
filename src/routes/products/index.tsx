@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
-import { mockProducts } from "../mocks/productMock";
+import { mockProducts } from "../../mocks/productMock";
 
 const productsSearchSchema = z.object({
   category: z.string().optional(),
@@ -10,7 +10,7 @@ const productsSearchSchema = z.object({
 
 type productsSearchSchemaType = z.infer<typeof productsSearchSchema>;
 
-export const Route = createFileRoute("/products")({
+export const Route = createFileRoute("/products/")({
   validateSearch: productsSearchSchema,
   component: ProductsComponent,
 });
@@ -174,7 +174,7 @@ function ProductsComponent() {
                   ${product.price}
                 </span>
                 <Link
-                  to="/products/$productId"
+                  to="/products/find/$productId"
                   params={{ productId: product.id.toString() }}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >

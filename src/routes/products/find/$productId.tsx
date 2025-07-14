@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { mockProducts } from "../mocks/productMock";
+import { mockProducts } from "../../../mocks/productMock";
 
-export const Route = createFileRoute("/products/$productId")({
+export const Route = createFileRoute("/products/find/$productId")({
   component: ProductDetailComponent,
   loader: ({ params }) => {
     const product = mockProducts.find(
@@ -144,7 +144,7 @@ function ProductDetailComponent() {
                     ${relatedProduct.price}
                   </span>
                   <Link
-                    to="/products/$productId"
+                    to="/products/find/$productId"
                     params={{ productId: relatedProduct.id.toString() }}
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                   >
