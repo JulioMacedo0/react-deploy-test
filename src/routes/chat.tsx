@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
+import { getWsUrl, debugEnvConfig } from "../utils/env";
 
 export const Route = createFileRoute("/chat")({
   component: ChatComponent,
@@ -15,15 +17,12 @@ interface Message {
 function ChatComponent() {
   const [nickname, setNickname] = useState<string>("");
   const [isNicknameSet, setIsNicknameSet] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      username: "System",
-      text: "Welcome to the chat! Please be respectful and enjoy the conversation.",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [connectedUsers, setConnectedUsers] = useState<string[]>([]);
+  const [wsUrl] = useState<string>(() => getWsUrl());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -34,31 +33,75 @@ function ChatComponent() {
     scrollToBottom();
   }, [messages]);
 
+  // WebSocket connection effect
+  useEffect(() => {
+    debugEnvConfig(); // Show environment config in development
+    console.log("Connecting to WebSocket server at:", wsUrl);
+
+    const newSocket = io(wsUrl);
+
+    newSocket.on("connect", () => {
+      console.log("Connected to chat server");
+      setIsConnected(true);
+    });
+
+    newSocket.on("disconnect", () => {
+      console.log("Disconnected from chat server");
+      setIsConnected(false);
+    });
+
+    newSocket.on("message", (message) => {
+      console.log("Received message:", message);
+      setMessages((prev) => [
+        ...prev,
+        {
+          ...message,
+          timestamp: new Date(message.timestamp),
+        },
+      ]);
+    });
+
+    newSocket.on("nickname-set", () => {
+      console.log("Nickname confirmed by server");
+      setIsNicknameSet(true);
+    });
+
+    newSocket.on("nickname-error", (error) => {
+      console.error("Nickname error:", error);
+      alert(`Nickname error: ${error}`);
+    });
+
+    newSocket.on("users-update", (users) => {
+      console.log("Users update:", users);
+      setConnectedUsers(users);
+    });
+
+    newSocket.on("error", (error) => {
+      console.error("Socket error:", error);
+      alert(`Chat error: ${error}`);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      console.log("Cleaning up socket connection");
+      newSocket.close();
+    };
+  }, [wsUrl]);
+
   const handleNicknameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nickname.trim().length >= 2) {
-      setIsNicknameSet(true);
-      // Add welcome message
-      const welcomeMessage: Message = {
-        id: Date.now(),
-        username: "System",
-        text: `${nickname} joined the chat!`,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, welcomeMessage]);
+    if (nickname.trim().length >= 2 && socket) {
+      console.log("Setting nickname:", nickname.trim());
+      socket.emit("set-nickname", { nickname: nickname.trim() });
     }
   };
 
   const handleMessageSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage.trim()) {
-      const message: Message = {
-        id: Date.now(),
-        username: nickname,
-        text: newMessage.trim(),
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, message]);
+    if (newMessage.trim() && socket) {
+      console.log("Sending message:", newMessage.trim());
+      socket.emit("send-message", { text: newMessage.trim() });
       setNewMessage("");
     }
   };
@@ -84,16 +127,14 @@ function ChatComponent() {
   };
 
   const handleLeaveChat = () => {
-    const leaveMessage: Message = {
-      id: Date.now(),
-      username: "System",
-      text: `${nickname} left the chat.`,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, leaveMessage]);
+    if (socket) {
+      console.log("Leaving chat");
+      socket.emit("leave-chat");
+    }
     setIsNicknameSet(false);
     setNickname("");
     setNewMessage("");
+    setMessages([]);
   };
 
   // Nickname Entry Screen
@@ -155,23 +196,33 @@ function ChatComponent() {
 
             <button
               type="submit"
-              disabled={nickname.trim().length < 2}
+              disabled={nickname.trim().length < 2 || !isConnected}
               className="w-full bg-blue-600 text-white py-3.5 px-4 rounded-lg font-semibold text-base hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              Join Chat
+              {!isConnected ? "Connecting..." : "Join Chat"}
             </button>
           </form>
 
           <div className="mt-5 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
             <div className="flex items-center justify-center space-x-3 sm:space-x-4 text-xs sm:text-sm text-gray-500">
               <div className="flex items-center">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-1.5"></div>
-                <span>Online</span>
+                <div
+                  className={`w-2 h-2 rounded-full mr-1.5 ${
+                    isConnected ? "bg-green-500" : "bg-red-500"
+                  }`}
+                ></div>
+                <span>{isConnected ? "Connected" : "Connecting..."}</span>
               </div>
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-1.5"></div>
                 <span>Demo Chat</span>
               </div>
+              {connectedUsers.length > 0 && (
+                <div className="flex items-center">
+                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-1.5"></div>
+                  <span>{connectedUsers.length} online</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -187,12 +238,26 @@ function ChatComponent() {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-3 sm:px-6 py-3 sm:py-4 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="min-w-0 flex-1">
-              <h2 className="text-base sm:text-xl font-semibold text-white truncate">
-                Chat Room
-              </h2>
-              <p className="text-xs sm:text-sm text-blue-100 truncate">
-                Logged in as: <span className="font-medium">{nickname}</span>
-              </p>
+              <div className="flex items-center space-x-2">
+                <h2 className="text-base sm:text-xl font-semibold text-white truncate">
+                  Chat Room
+                </h2>
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected ? "bg-green-400" : "bg-red-400"
+                  }`}
+                ></div>
+              </div>
+              <div className="flex items-center space-x-4 text-xs sm:text-sm text-blue-100">
+                <span className="truncate">
+                  Logged in as: <span className="font-medium">{nickname}</span>
+                </span>
+                {connectedUsers.length > 0 && (
+                  <span className="flex-shrink-0">
+                    {connectedUsers.length} online
+                  </span>
+                )}
+              </div>
             </div>
             <button
               onClick={handleLeaveChat}
@@ -206,6 +271,26 @@ function ChatComponent() {
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-3 sm:p-6 space-y-2.5 sm:space-y-4 bg-gray-50">
+          {!isConnected && (
+            <div className="text-center py-4">
+              <div className="inline-flex items-center px-3 py-2 rounded-lg bg-yellow-100 text-yellow-800 text-sm">
+                <svg
+                  className="w-4 h-4 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  />
+                </svg>
+                Connecting to chat server...
+              </div>
+            </div>
+          )}
           {messages.map((message) => (
             <div key={message.id} className="flex space-x-2 sm:space-x-3">
               <div
@@ -269,14 +354,17 @@ function ChatComponent() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors"
+              placeholder={
+                isConnected ? "Type your message..." : "Connecting..."
+              }
+              className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base transition-colors disabled:bg-gray-100 disabled:cursor-not-allowed"
               maxLength={500}
+              disabled={!isConnected}
               autoFocus
             />
             <button
               type="submit"
-              disabled={!newMessage.trim()}
+              disabled={!newMessage.trim() || !isConnected}
               className="bg-blue-600 text-white px-3 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex-shrink-0"
             >
               <span className="hidden sm:inline">Send</span>
