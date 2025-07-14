@@ -7,11 +7,11 @@ export const Route = createFileRoute("/about")({
 function AboutComponent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <div className="inline-block p-3 bg-blue-100 rounded-full mb-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
+        <div className="text-center mb-8 sm:mb-16">
+          <div className="inline-block p-3 bg-blue-100 rounded-full mb-4 sm:mb-6">
             <svg
-              className="w-12 h-12 text-blue-600"
+              className="w-8 h-8 sm:w-12 sm:h-12 text-blue-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -24,18 +24,18 @@ function AboutComponent() {
               />
             </svg>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             About TanStack Router
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8 max-w-3xl mx-auto px-2">
             Discover the power of <strong>TanStack Router</strong> - a modern
             and scalable router for React with full TypeScript support,
             integrated data loading and first-class search parameter APIs.
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 px-4 sm:px-0">
             <Link
               to="/products"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-flex items-center"
+              className="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-flex items-center justify-center w-full sm:w-auto"
             >
               View Products
               <svg
@@ -54,16 +54,16 @@ function AboutComponent() {
             </Link>
             <Link
               to="/dashboard"
-              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors border border-blue-200"
+              className="bg-white text-blue-600 px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors border border-blue-200 w-full sm:w-auto text-center"
             >
               Dashboard
             </Link>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-16">
+          <div className="bg-white rounded-xl p-4 sm:p-6 shadow-lg">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-3 sm:mb-4">
               <svg
                 className="w-6 h-6 text-blue-600"
                 fill="none"
@@ -78,10 +78,10 @@ function AboutComponent() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
               100% Type-Safe
             </h3>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Fully typed navigation with automatic type inference for
               parameters, search, and context.
             </p>
@@ -219,16 +219,16 @@ function AboutComponent() {
           </div>
         </div>
 
-        <div className="mt-16 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+        <div className="mt-8 sm:mt-16 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
             Why TanStack Router?
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">
                 Modern & Scalable
               </h3>
-              <p className="text-gray-700">
+              <p className="text-sm sm:text-base text-gray-700">
                 Built with modern best practices, TanStack Router is designed to
                 scale with applications of any size, from prototypes to
                 enterprise applications.
@@ -257,18 +257,18 @@ function AboutComponent() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-8 shadow-lg mt-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
+        <div className="bg-white rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg mt-8 sm:mt-16">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 text-center">
             Explore Demo Features
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Link
               to="/products"
-              className="group p-6 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all"
+              className="group p-4 sm:p-6 border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all"
             >
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-blue-200 transition-colors">
                 <svg
-                  className="w-5 h-5 text-blue-600"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -281,8 +281,10 @@ function AboutComponent() {
                   />
                 </svg>
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Products</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-gray-900 mb-1 sm:mb-2 text-sm sm:text-base">
+                Products
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-600">
                 Demonstrates search parameters, filters, pagination and dynamic
                 routes
               </p>

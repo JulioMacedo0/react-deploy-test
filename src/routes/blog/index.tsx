@@ -70,17 +70,19 @@ function BlogComponent() {
   const categories = [...new Set(mockBlogPosts.map((post) => post.category))];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12">
+      <div className="text-center mb-8 sm:mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+          Blog
+        </h1>
+        <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto px-2">
           Discover tutorials, best practices, and insights about TanStack Router
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div className="grid md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-4">
+          <div className="lg:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Posts
             </label>
@@ -89,7 +91,7 @@ function BlogComponent() {
                 type="text"
                 placeholder="Search by title, content, or tags..."
                 defaultValue={searchTerm || ""}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                 onChange={(e) => {
                   const value = e.target.value;
 
@@ -134,20 +136,22 @@ function BlogComponent() {
               >
                 All Categories
               </Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat}
-                  to="/blog"
-                  search={{ ...search, category: cat, page: 1 }}
-                  className={`block px-3 py-2 rounded-lg text-sm transition-colors capitalize ${
-                    category === cat
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  {cat}
-                </Link>
-              ))}
+              <div className="grid grid-cols-2 sm:grid-cols-1 gap-2 sm:gap-0 sm:space-y-2">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat}
+                    to="/blog"
+                    search={{ ...search, category: cat, page: 1 }}
+                    className={`block px-3 py-2 rounded-lg text-sm transition-colors capitalize ${
+                      category === cat
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {cat}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -157,20 +161,22 @@ function BlogComponent() {
               Sort By
             </label>
             <div className="space-y-2">
-              {sortValues.map((option) => (
-                <Link
-                  key={option.value}
-                  to="/blog"
-                  search={{ ...search, sort: option.value, page: 1 }}
-                  className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
-                    sort === option.value
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-                >
-                  {option.label}
-                </Link>
-              ))}
+              <div className="grid grid-cols-3 sm:grid-cols-1 gap-2 sm:gap-0 sm:space-y-2">
+                {sortValues.map((option) => (
+                  <Link
+                    key={option.value}
+                    to="/blog"
+                    search={{ ...search, sort: option.value, page: 1 }}
+                    className={`block px-3 py-2 rounded-lg text-sm transition-colors text-center sm:text-left ${
+                      sort === option.value
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {option.label}
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -221,28 +227,32 @@ function BlogComponent() {
         )}
       </div>
 
-      <div className="space-y-8 mb-8">
+      <div className="space-y-6 sm:space-y-8 mb-6 sm:mb-8">
         {paginatedPosts.map((post) => (
           <article
             key={post.id}
             className="bg-white rounded-lg shadow-md overflow-hidden"
           >
-            <div className="p-6">
-              <div className="flex items-start space-x-4">
-                <div className="text-4xl">{post.image}</div>
-                <div className="flex-1">
-                  <div className="flex items-center space-x-2 mb-2">
+            <div className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-4">
+                <div className="text-3xl sm:text-4xl self-center sm:self-start">
+                  {post.image}
+                </div>
+                <div className="flex-1 w-full">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
                     <span className="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full capitalize">
                       {post.category}
                     </span>
                     <span className="text-sm text-gray-500">
                       {post.readTime}
                     </span>
-                    <span className="text-sm text-gray-500">•</span>
+                    <span className="text-sm text-gray-500 hidden sm:inline">
+                      •
+                    </span>
                     <span className="text-sm text-gray-500">{post.date}</span>
                   </div>
 
-                  <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                     <Link
                       to="/blog/find/$postId"
                       params={{ postId: post.id.toString() }}
@@ -251,12 +261,12 @@ function BlogComponent() {
                     </Link>
                   </h2>
 
-                  <p className="text-gray-600 mb-4 leading-relaxed">
+                  <p className="text-gray-600 mb-3 sm:mb-4 leading-relaxed text-sm sm:text-base">
                     {post.excerpt}
                   </p>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                       <span className="text-sm text-gray-500">
                         By {post.author}
                       </span>
@@ -265,7 +275,7 @@ function BlogComponent() {
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1 sm:gap-2 w-full sm:w-auto">
                       {post.tags.slice(0, 3).map((tag) => (
                         <Link
                           key={tag}
@@ -306,11 +316,11 @@ function BlogComponent() {
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center space-x-2">
+        <div className="flex flex-wrap justify-center items-center gap-2">
           <Link
             to="/blog"
             search={{ ...search, page: Math.max(1, page - 1) }}
-            className={`px-3 py-2 rounded-lg ${
+            className={`px-3 py-2 rounded-lg text-sm ${
               page === 1
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
@@ -319,27 +329,35 @@ function BlogComponent() {
             Previous
           </Link>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-            (pageNum) => (
-              <Link
-                key={pageNum}
-                to="/blog"
-                search={{ ...search, page: pageNum }}
-                className={`px-3 py-2 rounded-lg ${
-                  page === pageNum
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
-                }`}
-              >
-                {pageNum}
-              </Link>
-            )
-          )}
+          <div className="hidden sm:flex">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNum) => (
+                <Link
+                  key={pageNum}
+                  to="/blog"
+                  search={{ ...search, page: pageNum }}
+                  className={`px-3 py-2 rounded-lg text-sm ${
+                    page === pageNum
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
+                  }`}
+                >
+                  {pageNum}
+                </Link>
+              )
+            )}
+          </div>
+
+          <div className="flex sm:hidden">
+            <span className="px-3 py-2 text-sm text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+          </div>
 
           <Link
             to="/blog"
             search={{ ...search, page: Math.min(totalPages, page + 1) }}
-            className={`px-3 py-2 rounded-lg ${
+            className={`px-3 py-2 rounded-lg text-sm ${
               page === totalPages
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
@@ -350,7 +368,7 @@ function BlogComponent() {
         </div>
       )}
 
-      <div className="text-center mt-6 text-gray-600">
+      <div className="text-center mt-4 sm:mt-6 text-gray-600 text-sm sm:text-base">
         Showing {paginatedPosts.length} of {filteredPosts.length} posts
         {category && ` in "${category}" category`}
         {searchTerm && ` matching "${searchTerm}"`}

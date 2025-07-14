@@ -58,25 +58,25 @@ function ProductsComponent() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Products</h1>
-        <p className="text-gray-600">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Products</h1>
+        <p className="text-sm sm:text-base text-gray-600">
           Explore our collection with filtering, sorting, and pagination
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-        <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-8">
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
               Category:
             </label>
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2">
               <Link
                 to="/products"
                 search={{ ...search, category: undefined, page: 1 }}
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                className={`px-3 py-1 rounded-full text-sm transition-colors whitespace-nowrap ${
                   !category
                     ? "bg-blue-600 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -89,7 +89,7 @@ function ProductsComponent() {
                   key={cat}
                   to="/products"
                   search={{ ...search, category: cat, page: 1 }}
-                  className={`px-3 py-1 rounded-full text-sm transition-colors capitalize ${
+                  className={`px-3 py-1 rounded-full text-sm transition-colors capitalize whitespace-nowrap ${
                     category === cat
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -101,17 +101,17 @@ function ProductsComponent() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <label className="text-sm font-medium text-gray-700 whitespace-nowrap">
               Sort by:
             </label>
-            <div className="flex space-x-2">
+            <div className="flex flex-wrap gap-2">
               {sortValues.map((option) => (
                 <Link
                   key={option.value}
                   to="/products"
                   search={{ ...search, sort: option.value, page: 1 }}
-                  className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                  className={`px-3 py-1 rounded-full text-sm transition-colors whitespace-nowrap ${
                     sort === option.value
                       ? "bg-blue-600 text-white"
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -157,31 +157,31 @@ function ProductsComponent() {
         )}
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
         {paginatedProducts.map((product) => (
           <div
             key={product.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
+            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
           >
-            <div className="p-6">
-              <div className="text-4xl mb-4">{product.image}</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <div className="p-4 sm:p-6">
+              <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{product.image}</div>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 {product.name}
               </h3>
-              <p className="text-gray-600 mb-4">{product.description}</p>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-blue-600">
+              <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{product.description}</p>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                <span className="text-xl sm:text-2xl font-bold text-blue-600">
                   ${product.price}
                 </span>
                 <Link
                   to="/products/find/$productId"
                   params={{ productId: product.id.toString() }}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-center text-sm sm:text-base"
                 >
                   View Details
                 </Link>
               </div>
-              <div className="mt-2">
+              <div className="mt-2 sm:mt-3">
                 <span className="inline-block px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full capitalize">
                   {product.category}
                 </span>
@@ -192,11 +192,11 @@ function ProductsComponent() {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center space-x-2">
+        <div className="flex flex-wrap justify-center items-center gap-2 mb-4">
           <Link
             to="/products"
             search={{ ...search, page: Math.max(1, page - 1) }}
-            className={`px-3 py-2 rounded-lg ${
+            className={`px-3 py-2 rounded-lg text-sm sm:text-base ${
               page === 1
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
@@ -206,27 +206,29 @@ function ProductsComponent() {
             Previous
           </Link>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-            (pageNum) => (
-              <Link
-                key={pageNum}
-                to="/products"
-                search={{ ...search, page: pageNum }}
-                className={`px-3 py-2 rounded-lg ${
-                  page === pageNum
-                    ? "bg-blue-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
-                }`}
-              >
-                {pageNum}
-              </Link>
-            )
-          )}
+          <div className="flex flex-wrap gap-1 sm:gap-2">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNum) => (
+                <Link
+                  key={pageNum}
+                  to="/products"
+                  search={{ ...search, page: pageNum }}
+                  className={`px-2 sm:px-3 py-2 rounded-lg text-sm sm:text-base ${
+                    page === pageNum
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
+                  }`}
+                >
+                  {pageNum}
+                </Link>
+              )
+            )}
+          </div>
 
           <Link
             to="/products"
             search={{ ...search, page: Math.min(totalPages, page + 1) }}
-            className={`px-3 py-2 rounded-lg ${
+            className={`px-3 py-2 rounded-lg text-sm sm:text-base ${
               page === totalPages
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300"
@@ -238,7 +240,7 @@ function ProductsComponent() {
         </div>
       )}
 
-      <div className="text-center mt-6 text-gray-600">
+      <div className="text-center text-sm sm:text-base text-gray-600">
         Showing {paginatedProducts.length} of {filteredProducts.length} products
         {category && ` in "${category}" category`}
       </div>
