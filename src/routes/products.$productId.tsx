@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { mockProducts } from "../mocks/productMock";
 
 export const Route = createFileRoute("/products/$productId")({
   component: ProductDetailComponent,
@@ -13,149 +14,11 @@ export const Route = createFileRoute("/products/$productId")({
   },
 });
 
-// Mock data (same as products page)
-const mockProducts = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    price: 199.99,
-    category: "electronics",
-    image: "🎧",
-    description: "High-quality wireless headphones with noise cancellation",
-    features: [
-      "Active Noise Cancellation",
-      "30-hour battery life",
-      "Wireless charging case",
-      "Premium audio quality",
-      "Comfortable over-ear design",
-    ],
-    specs: {
-      "Driver Size": "40mm",
-      "Frequency Response": "20Hz - 20kHz",
-      "Battery Life": "30 hours",
-      Connectivity: "Bluetooth 5.0",
-      Weight: "250g",
-    },
-  },
-  {
-    id: 2,
-    name: "Smart Watch",
-    price: 299.99,
-    category: "electronics",
-    image: "⌚",
-    description: "Feature-rich smartwatch with health tracking",
-    features: [
-      "Heart rate monitoring",
-      "GPS tracking",
-      "Water resistant",
-      "Sleep tracking",
-      "Multiple sport modes",
-    ],
-    specs: {
-      Display: "1.4 inch AMOLED",
-      "Battery Life": "7 days",
-      "Water Resistance": "50m",
-      Sensors: "Heart Rate, GPS, Accelerometer",
-      Compatibility: "iOS & Android",
-    },
-  },
-  {
-    id: 3,
-    name: "Coffee Mug",
-    price: 24.99,
-    category: "home",
-    image: "☕",
-    description: "Premium ceramic coffee mug with thermal insulation",
-    features: [
-      "Double-wall insulation",
-      "Keeps drinks hot for 2 hours",
-      "Ergonomic handle",
-      "Microwave safe",
-      "Dishwasher safe",
-    ],
-    specs: {
-      Material: "Premium Ceramic",
-      Capacity: "350ml",
-      Dimensions: "10cm x 8cm",
-      Weight: "300g",
-      "Temperature Retention": "2 hours",
-    },
-  },
-  {
-    id: 4,
-    name: "Laptop Stand",
-    price: 79.99,
-    category: "accessories",
-    image: "💻",
-    description: "Ergonomic aluminum laptop stand for better posture",
-    features: [
-      "Adjustable height",
-      "Aluminum construction",
-      "Heat dissipation",
-      "Foldable design",
-      "Universal compatibility",
-    ],
-    specs: {
-      Material: "Aluminum Alloy",
-      Compatibility: "11-17 inch laptops",
-      "Height Range": "15-25cm",
-      Weight: "1.2kg",
-      "Max Load": "10kg",
-    },
-  },
-  {
-    id: 5,
-    name: "Desk Lamp",
-    price: 89.99,
-    category: "home",
-    image: "💡",
-    description:
-      "LED desk lamp with adjustable brightness and color temperature",
-    features: [
-      "Adjustable brightness",
-      "Color temperature control",
-      "Touch controls",
-      "USB charging port",
-      "Memory function",
-    ],
-    specs: {
-      "Light Source": "LED",
-      Power: "12W",
-      "Color Temperature": "3000K-6500K",
-      Dimming: "10-100%",
-      "USB Output": "5V/1A",
-    },
-  },
-  {
-    id: 6,
-    name: "Wireless Mouse",
-    price: 59.99,
-    category: "accessories",
-    image: "🖱️",
-    description: "Precision wireless mouse with ergonomic design",
-    features: [
-      "High precision sensor",
-      "Ergonomic design",
-      "Long battery life",
-      "Silent clicks",
-      "Programmable buttons",
-    ],
-    specs: {
-      DPI: "1000-3200",
-      Connectivity: "2.4GHz Wireless",
-      "Battery Life": "12 months",
-      Buttons: "6 programmable",
-      Compatibility: "Windows, Mac, Linux",
-    },
-  },
-];
-
 function ProductDetailComponent() {
   const { product } = Route.useLoaderData();
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Breadcrumb */}
       <nav className="mb-8">
         <ol className="flex items-center space-x-2 text-sm">
           <li>
@@ -174,15 +37,12 @@ function ProductDetailComponent() {
         </ol>
       </nav>
 
-      {/* Product Detail */}
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-8 p-8">
-          {/* Product Image */}
           <div className="flex items-center justify-center bg-gray-50 rounded-lg p-12">
             <div className="text-8xl">{product.image}</div>
           </div>
 
-          {/* Product Info */}
           <div className="space-y-6">
             <div>
               <div className="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 rounded-full mb-3 capitalize">
@@ -205,7 +65,6 @@ function ProductDetailComponent() {
               </button>
             </div>
 
-            {/* Features */}
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Key Features
@@ -222,7 +81,6 @@ function ProductDetailComponent() {
           </div>
         </div>
 
-        {/* Specifications */}
         <div className="border-t border-gray-200 p-8">
           <h3 className="text-xl font-semibold text-gray-900 mb-6">
             Specifications
@@ -240,7 +98,6 @@ function ProductDetailComponent() {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="bg-gray-50 px-8 py-6">
           <div className="flex space-x-4">
             <Link
@@ -260,7 +117,6 @@ function ProductDetailComponent() {
         </div>
       </div>
 
-      {/* Related Products */}
       <div className="mt-12">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">
           Related Products

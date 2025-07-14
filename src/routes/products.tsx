@@ -1,76 +1,24 @@
-import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
+import { mockProducts } from "../mocks/productMock";
 
-// Define search schema for type safety
 const productsSearchSchema = z.object({
   category: z.string().optional(),
-  sort: z.enum(["name", "price", "date"]).optional(),
+  sort: z.enum(["name", "price", "date"]).optional().default("name"),
   page: z.number().min(1).optional().default(1),
 });
+
+type productsSearchSchemaType = z.infer<typeof productsSearchSchema>;
 
 export const Route = createFileRoute("/products")({
   validateSearch: productsSearchSchema,
   component: ProductsComponent,
 });
 
-// Mock data
-const mockProducts = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    price: 199.99,
-    category: "electronics",
-    image: "🎧",
-    description: "High-quality wireless headphones with noise cancellation",
-  },
-  {
-    id: 2,
-    name: "Smart Watch",
-    price: 299.99,
-    category: "electronics",
-    image: "⌚",
-    description: "Feature-rich smartwatch with health tracking",
-  },
-  {
-    id: 3,
-    name: "Coffee Mug",
-    price: 24.99,
-    category: "home",
-    image: "☕",
-    description: "Premium ceramic coffee mug with thermal insulation",
-  },
-  {
-    id: 4,
-    name: "Laptop Stand",
-    price: 79.99,
-    category: "accessories",
-    image: "💻",
-    description: "Ergonomic aluminum laptop stand for better posture",
-  },
-  {
-    id: 5,
-    name: "Desk Lamp",
-    price: 89.99,
-    category: "home",
-    image: "💡",
-    description:
-      "LED desk lamp with adjustable brightness and color temperature",
-  },
-  {
-    id: 6,
-    name: "Wireless Mouse",
-    price: 59.99,
-    category: "accessories",
-    image: "🖱️",
-    description: "Precision wireless mouse with ergonomic design",
-  },
-];
-
 function ProductsComponent() {
-  const search = useSearch({ from: "/products" });
+  const search = Route.useSearch();
   const { category, sort = "name", page = 1 } = search;
 
-  // Filter and sort products
   let filteredProducts = mockProducts;
 
   if (category) {
@@ -84,7 +32,7 @@ function ProductsComponent() {
       case "price":
         return a.price - b.price;
       case "date":
-        return a.id - b.id; // Using id as date proxy
+        return a.id - b.id;
       case "name":
       default:
         return a.name.localeCompare(b.name);
@@ -100,9 +48,17 @@ function ProductsComponent() {
     startIndex + itemsPerPage
   );
 
+  const sortValues: {
+    value: productsSearchSchemaType["sort"];
+    label: string;
+  }[] = [
+    { value: "name", label: "Name" },
+    { value: "price", label: "Price" },
+    { value: "date", label: "Newest" },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Products</h1>
         <p className="text-gray-600">
@@ -110,10 +66,8 @@ function ProductsComponent() {
         </p>
       </div>
 
-      {/* Filters and Sorting */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="flex flex-wrap gap-4 items-center">
-          {/* Category Filter */}
           <div className="flex items-center space-x-2">
             <label className="text-sm font-medium text-gray-700">
               Category:
@@ -147,21 +101,16 @@ function ProductsComponent() {
             </div>
           </div>
 
-          {/* Sort Options */}
           <div className="flex items-center space-x-2">
             <label className="text-sm font-medium text-gray-700">
               Sort by:
             </label>
             <div className="flex space-x-2">
-              {[
-                { value: "name", label: "Name" },
-                { value: "price", label: "Price" },
-                { value: "date", label: "Newest" },
-              ].map((option) => (
+              {sortValues.map((option) => (
                 <Link
                   key={option.value}
                   to="/products"
-                  search={{ ...search, sort: option.value as any, page: 1 }}
+                  search={{ ...search, sort: option.value, page: 1 }}
                   className={`px-3 py-1 rounded-full text-sm transition-colors ${
                     sort === option.value
                       ? "bg-blue-600 text-white"
@@ -175,7 +124,6 @@ function ProductsComponent() {
           </div>
         </div>
 
-        {/* Active Filters Display */}
         {(category || search.sort) && (
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex items-center space-x-2">
@@ -209,7 +157,6 @@ function ProductsComponent() {
         )}
       </div>
 
-      {/* Products Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
         {paginatedProducts.map((product) => (
           <div
@@ -244,7 +191,6 @@ function ProductsComponent() {
         ))}
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-2">
           <Link
@@ -292,7 +238,6 @@ function ProductsComponent() {
         </div>
       )}
 
-      {/* Results Info */}
       <div className="text-center mt-6 text-gray-600">
         Showing {paginatedProducts.length} of {filteredProducts.length} products
         {category && ` in "${category}" category`}
