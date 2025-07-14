@@ -1,118 +1,35 @@
-import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { z } from "zod";
+import { mockBlogPosts } from "../mocks/mockBlog";
 
-// Define search schema for blog filtering and pagination
 const blogSearchSchema = z.object({
   page: z.number().min(1).optional().default(1),
   category: z.string().optional(),
-  search: z.string().optional(),
+  searchTerm: z.string().optional(),
   sort: z.enum(["date", "title", "popularity"]).optional().default("date"),
 });
+
+type BlogSearchSchemaType = z.infer<typeof blogSearchSchema>;
 
 export const Route = createFileRoute("/blog")({
   validateSearch: blogSearchSchema,
   component: BlogComponent,
 });
 
-// Mock blog posts data
-const mockBlogPosts = [
-  {
-    id: 1,
-    title: "Getting Started with TanStack Router",
-    excerpt:
-      "Learn the basics of TanStack Router and how to set up routing in your React application.",
-    content:
-      "TanStack Router is a powerful routing solution for React applications...",
-    author: "John Doe",
-    category: "tutorial",
-    date: "2025-01-10",
-    readTime: "5 min read",
-    image: "📚",
-    tags: ["react", "routing", "tutorial"],
-    popularity: 1250,
-  },
-  {
-    id: 2,
-    title: "Advanced Routing Patterns",
-    excerpt:
-      "Explore advanced routing patterns including nested routes, layouts, and parameter validation.",
-    content:
-      "Once you've mastered the basics, it's time to explore more advanced patterns...",
-    author: "Jane Smith",
-    category: "advanced",
-    date: "2025-01-08",
-    readTime: "8 min read",
-    image: "🚀",
-    tags: ["react", "advanced", "patterns"],
-    popularity: 890,
-  },
-  {
-    id: 3,
-    title: "Type-Safe Search Parameters",
-    excerpt:
-      "How to implement type-safe search parameters with validation using Zod schemas.",
-    content:
-      "Type safety is crucial for robust applications. Learn how to validate search params...",
-    author: "Mike Johnson",
-    category: "tutorial",
-    date: "2025-01-05",
-    readTime: "6 min read",
-    image: "🔍",
-    tags: ["typescript", "validation", "zod"],
-    popularity: 756,
-  },
-  {
-    id: 4,
-    title: "Building a Dashboard with Nested Routes",
-    excerpt:
-      "Step-by-step guide to building a dashboard with complex nested routing structures.",
-    content:
-      "Dashboards often require complex layouts with multiple levels of navigation...",
-    author: "Sarah Wilson",
-    category: "tutorial",
-    date: "2025-01-03",
-    readTime: "12 min read",
-    image: "📊",
-    tags: ["dashboard", "nested-routes", "layout"],
-    popularity: 432,
-  },
-  {
-    id: 5,
-    title: "Performance Optimization Tips",
-    excerpt:
-      "Best practices for optimizing your TanStack Router application for better performance.",
-    content:
-      "Performance is key to a great user experience. Here are some optimization tips...",
-    author: "Tom Brown",
-    category: "performance",
-    date: "2025-01-01",
-    readTime: "10 min read",
-    image: "⚡",
-    tags: ["performance", "optimization", "best-practices"],
-    popularity: 623,
-  },
-  {
-    id: 6,
-    title: "Error Handling and 404 Pages",
-    excerpt:
-      "Learn how to handle errors gracefully and create custom 404 pages in your router.",
-    content:
-      "Error handling is an important aspect of any application. Let's explore...",
-    author: "Emily Davis",
-    category: "advanced",
-    date: "2024-12-28",
-    readTime: "7 min read",
-    image: "🚨",
-    tags: ["error-handling", "404", "user-experience"],
-    popularity: 345,
-  },
-];
-
 function BlogComponent() {
-  const search = useSearch({ from: "/blog" });
-  const { page = 1, category, search: searchTerm, sort = "date" } = search;
+  const search = Route.useSearch();
+  const { page = 1, category, searchTerm, sort = "date" } = search;
+  const navigate = Route.useNavigate();
 
-  // Filter posts
+  const sortValues: {
+    value: BlogSearchSchemaType["sort"];
+    label: string;
+  }[] = [
+    { value: "date", label: "Latest" },
+    { value: "title", label: "Title" },
+    { value: "popularity", label: "Popular" },
+  ];
+
   let filteredPosts = mockBlogPosts;
 
   if (category) {
@@ -130,7 +47,6 @@ function BlogComponent() {
     );
   }
 
-  // Sort posts
   filteredPosts.sort((a, b) => {
     switch (sort) {
       case "title":
@@ -143,7 +59,6 @@ function BlogComponent() {
     }
   });
 
-  // Pagination
   const postsPerPage = 3;
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
   const startIndex = (page - 1) * postsPerPage;
@@ -152,12 +67,10 @@ function BlogComponent() {
     startIndex + postsPerPage
   );
 
-  // Get unique categories
   const categories = [...new Set(mockBlogPosts.map((post) => post.category))];
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Blog</h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -165,10 +78,8 @@ function BlogComponent() {
         </p>
       </div>
 
-      {/* Search and Filters */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="grid md:grid-cols-4 gap-4">
-          {/* Search Input */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Search Posts
@@ -180,9 +91,12 @@ function BlogComponent() {
                 defaultValue={searchTerm || ""}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 onChange={(e) => {
-                  // In a real app, you'd implement debounced search
                   const value = e.target.value;
-                  // Navigate with new search term
+
+                  navigate({
+                    search: { ...search, searchTerm: value, page: 1 },
+                  });
+
                   console.log("Search:", value);
                 }}
               />
@@ -204,7 +118,6 @@ function BlogComponent() {
             </div>
           </div>
 
-          {/* Category Filter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Category
@@ -244,15 +157,11 @@ function BlogComponent() {
               Sort By
             </label>
             <div className="space-y-2">
-              {[
-                { value: "date", label: "Latest" },
-                { value: "title", label: "Title" },
-                { value: "popularity", label: "Popular" },
-              ].map((option) => (
+              {sortValues.map((option) => (
                 <Link
                   key={option.value}
                   to="/blog"
-                  search={{ ...search, sort: option.value as any, page: 1 }}
+                  search={{ ...search, sort: option.value, page: 1 }}
                   className={`block px-3 py-2 rounded-lg text-sm transition-colors ${
                     sort === option.value
                       ? "bg-blue-600 text-white"
@@ -288,7 +197,7 @@ function BlogComponent() {
                   Search: "{searchTerm}"
                   <Link
                     to="/blog"
-                    search={{ ...search, search: undefined }}
+                    search={{ ...search, searchTerm: undefined }}
                     className="ml-1 text-blue-600 hover:text-blue-800"
                   >
                     ×
@@ -312,7 +221,6 @@ function BlogComponent() {
         )}
       </div>
 
-      {/* Blog Posts Grid */}
       <div className="space-y-8 mb-8">
         {paginatedPosts.map((post) => (
           <article
@@ -362,7 +270,7 @@ function BlogComponent() {
                         <Link
                           key={tag}
                           to="/blog"
-                          search={{ ...search, search: tag, page: 1 }}
+                          search={{ ...search, searchTerm: tag, page: 1 }}
                           className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors"
                         >
                           #{tag}
@@ -377,7 +285,6 @@ function BlogComponent() {
         ))}
       </div>
 
-      {/* No Results */}
       {paginatedPosts.length === 0 && (
         <div className="text-center py-12">
           <div className="text-4xl mb-4">🔍</div>
@@ -398,7 +305,6 @@ function BlogComponent() {
         </div>
       )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center space-x-2">
           <Link
@@ -444,7 +350,6 @@ function BlogComponent() {
         </div>
       )}
 
-      {/* Results Info */}
       <div className="text-center mt-6 text-gray-600">
         Showing {paginatedPosts.length} of {filteredPosts.length} posts
         {category && ` in "${category}" category`}
