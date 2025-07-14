@@ -6,7 +6,7 @@ export const Route = createFileRoute("/dashboard/")({
 
 function DashboardIndexComponent() {
   return (
-    <div className="space-y-4 sm:space-y-6">
+    <div className="space-y-4 sm:space-y-6 w-full overflow-hidden">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
@@ -262,90 +262,92 @@ function DashboardIndexComponent() {
         <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
           Recent Orders
         </h3>
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
-          <div className="inline-block min-w-full align-middle">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Order ID
-                  </th>
-                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Customer
-                  </th>
-                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                    Product
-                  </th>
-                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {[
-                  {
-                    id: "#12345",
-                    customer: "John Doe",
-                    product: "Wireless Headphones",
-                    amount: "$199.99",
-                    status: "Completed",
-                  },
-                  {
-                    id: "#12346",
-                    customer: "Jane Smith",
-                    product: "Smart Watch",
-                    amount: "$299.99",
-                    status: "Processing",
-                  },
-                  {
-                    id: "#12347",
-                    customer: "Mike Johnson",
-                    product: "Coffee Mug",
-                    amount: "$24.99",
-                    status: "Shipped",
-                  },
-                  {
-                    id: "#12348",
-                    customer: "Sarah Wilson",
-                    product: "Laptop Stand",
-                    amount: "$79.99",
-                    status: "Completed",
-                  },
-                ].map((order) => (
-                  <tr key={order.id}>
-                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
-                      {order.id}
-                    </td>
-                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Order ID
+                </th>
+                <th className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Customer
+                </th>
+                <th className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                  Product
+                </th>
+                <th className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Status
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {[
+                {
+                  id: "#12345",
+                  customer: "John Doe",
+                  product: "Wireless Headphones",
+                  amount: "$199.99",
+                  status: "Completed",
+                },
+                {
+                  id: "#12346",
+                  customer: "Jane Smith",
+                  product: "Smart Watch",
+                  amount: "$299.99",
+                  status: "Processing",
+                },
+                {
+                  id: "#12347",
+                  customer: "Mike Johnson",
+                  product: "Coffee Mug",
+                  amount: "$24.99",
+                  status: "Shipped",
+                },
+                {
+                  id: "#12348",
+                  customer: "Sarah Wilson",
+                  product: "Laptop Stand",
+                  amount: "$79.99",
+                  status: "Completed",
+                },
+              ].map((order) => (
+                <tr key={order.id}>
+                  <td className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
+                    {order.id}
+                  </td>
+                  <td className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                    <div className="truncate max-w-24 sm:max-w-32">
                       {order.customer}
-                    </td>
-                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 hidden sm:table-cell">
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 hidden md:table-cell">
+                    <div className="truncate max-w-32 lg:max-w-48">
                       {order.product}
-                    </td>
-                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
-                      {order.amount}
-                    </td>
-                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          order.status === "Completed"
-                            ? "bg-green-100 text-green-800"
-                            : order.status === "Processing"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-blue-100 text-blue-800"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                  <td className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                    {order.amount}
+                  </td>
+                  <td className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 whitespace-nowrap">
+                    <span
+                      className={`inline-flex px-1.5 sm:px-2 py-1 text-xs font-semibold rounded-full ${
+                        order.status === "Completed"
+                          ? "bg-green-100 text-green-800"
+                          : order.status === "Processing"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

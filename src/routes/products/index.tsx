@@ -60,7 +60,9 @@ function ProductsComponent() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Products</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          Products
+        </h1>
         <p className="text-sm sm:text-base text-gray-600">
           Explore our collection with filtering, sorting, and pagination
         </p>
@@ -164,11 +166,15 @@ function ProductsComponent() {
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="p-4 sm:p-6">
-              <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">{product.image}</div>
+              <div className="text-3xl sm:text-4xl mb-3 sm:mb-4">
+                {product.image}
+              </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
                 {product.name}
               </h3>
-              <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">{product.description}</p>
+              <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
+                {product.description}
+              </p>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                 <span className="text-xl sm:text-2xl font-bold text-blue-600">
                   ${product.price}

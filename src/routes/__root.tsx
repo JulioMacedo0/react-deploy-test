@@ -48,6 +48,12 @@ function RootComponent() {
                 Products
               </Link>
               <Link
+                to="/chat"
+                className="text-gray-700 hover:text-blue-600 px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-colors [&.active]:text-blue-600 [&.active]:font-semibold"
+              >
+                Chat
+              </Link>
+              <Link
                 to="/dashboard"
                 className="text-gray-700 hover:text-blue-600 px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-colors [&.active]:text-blue-600 [&.active]:font-semibold"
               >
@@ -127,6 +133,13 @@ function RootComponent() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Products
+              </Link>
+              <Link
+                to="/chat"
+                className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium transition-colors [&.active]:text-blue-600 [&.active]:font-semibold"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Chat
               </Link>
               <Link
                 to="/dashboard"

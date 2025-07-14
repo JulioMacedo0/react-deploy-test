@@ -17,6 +17,7 @@ function DashboardLayoutComponent() {
             <nav className="space-y-1 sm:space-y-2">
               <Link
                 to="/dashboard"
+                activeOptions={{ exact: true }}
                 className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors [&.active]:bg-blue-100 [&.active]:text-blue-700 [&.active]:font-medium text-sm sm:text-base"
               >
                 Overview
